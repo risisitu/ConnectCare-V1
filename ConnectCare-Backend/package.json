@@ -1,0 +1,33 @@
+{
+  "name": "connectcare-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --detectOpenHandles",
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.9.3",
+    "pg": "^8.16.3",
+    "socket.io": "^4.8.3",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0",
+    "node-forge": "^1.3.3",
+    "nodemon": "^2.0.22",
+    "selfsigned": "^5.5.0",
+    "supertest": "^7.2.2"
+  }
+}

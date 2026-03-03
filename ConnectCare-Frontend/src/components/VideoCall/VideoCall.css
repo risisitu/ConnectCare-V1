@@ -1,0 +1,380 @@
+.video-call-container {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  background-color: #f3f4f6;
+  border-radius: 1rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.setup-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 1rem;
+}
+
+.setup-section input {
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  width: 300px;
+}
+
+.setup-section button {
+  padding: 0.75rem 2rem;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.video-section {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.status-bar {
+  padding: 1rem;
+  background-color: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.connection-status {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.connection-status.connected {
+  color: #10b981;
+}
+
+.connection-status.disconnected {
+  color: #ef4444;
+}
+
+.main-area {
+  flex: 1;
+  display: flex;
+  position: relative;
+  min-height: 0;
+  /* Prevents flex children from expanding container */
+}
+
+.videos-container {
+  flex: 1;
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #1f2937;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-wrapper {
+  position: relative;
+  background-color: #000;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  aspect-ratio: 16/9;
+  width: 45%;
+  max-width: 600px;
+}
+
+.video-wrapper video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-label {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.sidebar {
+  width: 300px;
+  background-color: white;
+  border-left: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.sidebar-header {
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  font-weight: 600;
+}
+
+.users-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+  background-color: #f9fafb;
+}
+
+.user-item.current-user {
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+}
+
+.call-btn {
+  padding: 0.25rem 0.75rem;
+  background-color: #10b981;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.controls-bar {
+  padding: 1rem;
+  background-color: #1f2937;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.control-btn {
+  padding: 0.75rem;
+  border-radius: 50%;
+  border: none;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: #4b5563;
+  color: white;
+  transition: background-color 0.2s;
+}
+
+.control-btn:hover {
+  background-color: #6b7280;
+}
+
+.control-btn.active {
+  background-color: #3b82f6;
+}
+
+.control-btn.danger {
+  background-color: #ef4444;
+}
+
+/* Modal */
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  text-align: center;
+  min-width: 300px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.modal-btn {
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.modal-btn.accept {
+  background-color: #10b981;
+  color: white;
+}
+
+.modal-btn.decline {
+  background-color: #ef4444;
+  color: white;
+}
+
+/* Chat UI */
+.chat-sidebar {
+  width: 300px;
+  background-color: white;
+  border-left: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.chat-header {
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-color: #e5ddd5;
+  /* WhatsApp BG */
+}
+
+.message.sent {
+  align-self: flex-end;
+  background-color: #dcf8c6;
+  /* WhatsApp Light Green */
+  color: #000;
+  border-bottom-right-radius: 0;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.message.received {
+  align-self: flex-start;
+  background-color: #ffffff;
+  /* White */
+  color: #000;
+  border-bottom-left-radius: 0;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.message {
+  padding: 0.5rem 0.8rem;
+  border-radius: 0.5rem;
+  max-width: 80%;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  position: relative;
+  margin-bottom: 4px;
+}
+
+.message-sender {
+  font-size: 0.7rem;
+  opacity: 0.8;
+  margin-bottom: 0.2rem;
+  display: block;
+}
+
+.chat-input-area {
+  padding: 1rem;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.chat-input-area input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+}
+
+.chat-send-btn {
+  padding: 0.5rem 1rem;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+/* Report Loading Overlay */
+.report-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  backdrop-filter: blur(5px);
+}
+
+.report-loading-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.report-loading-content h2 {
+  font-size: 1.5rem;
+  color: #1a202c;
+  font-weight: 700;
+}
+
+.report-loading-content p {
+  color: #4a5568;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #e2e8f0;
+  border-top: 5px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
