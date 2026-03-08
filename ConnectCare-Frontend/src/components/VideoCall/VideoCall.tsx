@@ -469,9 +469,6 @@ const VideoCall: React.FC<VideoCallProps> = ({ isModal, localUser, targetUser, o
                 // Handle cleanup if needed
                 console.log("Connection state change:", pc.connectionState);
             }
-            if (pc.connectionState === 'connected') {
-                startTimer();
-            }
         };
 
         pc.oniceconnectionstatechange = () => {
@@ -564,10 +561,6 @@ const VideoCall: React.FC<VideoCallProps> = ({ isModal, localUser, targetUser, o
         }
     };
 
-    // Timer State
-    const [timeLeft, setTimeLeft] = useState<number | null>(null);
-    const timerRef = useRef<any>(null);
-
     // ... existing refs and useEffects
 
     // Add end-call listener
@@ -602,39 +595,6 @@ const VideoCall: React.FC<VideoCallProps> = ({ isModal, localUser, targetUser, o
             socketRef.current?.off('end-call');
         };
     }, [isSocketConnected]); // Re-attach if socket reconnects (or just once if stable)
-
-    // Timer logic
-    useEffect(() => {
-        if (timeLeft === 0) {
-            // Time up
-            console.log('VideoCall: Time up!');
-            alert('Consultation time finished!');
-            forceEndCall();
-        }
-    }, [timeLeft]);
-
-    const startTimer = () => {
-        if (timerRef.current) clearInterval(timerRef.current);
-        setTimeLeft(600); // 10 minutes
-        timerRef.current = setInterval(() => {
-            setTimeLeft(prev => {
-                if (prev === null) return 600;
-                if (prev <= 0) {
-                    if (timerRef.current) clearInterval(timerRef.current);
-                    return 0;
-                }
-                return prev - 1;
-            });
-        }, 1000);
-    };
-
-    const stopTimer = () => {
-        if (timerRef.current) {
-            clearInterval(timerRef.current);
-            timerRef.current = null;
-        }
-        setTimeLeft(null);
-    };
 
     const forceEndCall = async () => {
         // Emit end-call to remote immediately for instant termination on their side
@@ -740,12 +700,8 @@ const VideoCall: React.FC<VideoCallProps> = ({ isModal, localUser, targetUser, o
         if (remoteVideoRef.current) {
             remoteVideoRef.current.srcObject = null;
         }
-        if (remoteVideoRef.current) {
-            remoteVideoRef.current.srcObject = null;
-        }
         setRemoteUsername('Remote User');
         setCurrentPeerId(null);
-        stopTimer();
     };
 
 
@@ -809,11 +765,6 @@ const VideoCall: React.FC<VideoCallProps> = ({ isModal, localUser, targetUser, o
                         <div className="flex items-center gap-4">
                             <span>Status: {callStatus}</span>
                             <span>Logged in as: <strong>{username}</strong></span>
-                            {timeLeft !== null && (
-                                <span className={`font-bold text-xl ${timeLeft < 10 ? 'text-red-500 animate-pulse' : 'text-green-500'}`}>
-                                    Time Left: {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
-                                </span>
-                            )}
                         </div>
                         {effectiveTargetUser && (
                             <span className="ml-4">
