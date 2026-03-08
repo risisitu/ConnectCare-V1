@@ -12,9 +12,9 @@ class Appointment {
                 throw new Error('Doctor not found');
             }
 
-            // Check for conflicting appointments
+            // Check for conflicting appointments (include completed to permanently block used slots)
             const conflictCheck = await pool.query(
-                'SELECT id FROM appointments WHERE doctor_id = $1 AND appointment_date = $2 AND appointment_time = $3 AND status = \'scheduled\'',
+                "SELECT id FROM appointments WHERE doctor_id = $1 AND appointment_date = $2 AND appointment_time = $3 AND status IN ('scheduled', 'completed')",
                 [doctorId, appointmentDate, appointmentTime]
             );
             if (conflictCheck.rows.length > 0) {
@@ -67,7 +67,7 @@ class Appointment {
                 INNER JOIN patients p ON a.patient_id = p.id
                 WHERE a.${role}_id = $1
             `;
-            
+
             const values = [userId];
             let paramCount = 2;
 
@@ -96,14 +96,14 @@ class Appointment {
             // In a real application, this would integrate with a video call service
             // For now, we'll generate a mock link
             const videoCallLink = `https://meet.connectcare.com/${appointmentId}`;
-            
+
             const query = `
                 UPDATE appointments 
                 SET video_call_link = $1
                 WHERE id = $2 AND appointment_type = 'video'
                 RETURNING *
             `;
-            
+
             const result = await pool.query(query, [videoCallLink, appointmentId]);
             return result.rows[0];
         } catch (error) {
@@ -119,7 +119,7 @@ class Appointment {
                 WHERE id = $2 AND ${userRole}_id = $3
                 RETURNING *
             `;
-            
+
             const result = await pool.query(query, [status, appointmentId, userId]);
             if (result.rows.length === 0) {
                 throw new Error('Appointment not found or unauthorized');
@@ -144,7 +144,7 @@ class Appointment {
                 INNER JOIN patients p ON a.patient_id = p.id
                 WHERE a.id = $1
             `;
-            
+
             const result = await pool.query(query, [appointmentId]);
             return result.rows[0];
         } catch (error) {
@@ -158,7 +158,7 @@ class Appointment {
                 SELECT id FROM appointments 
                 WHERE id = $1 AND ${userRole}_id = $2
             `;
-            
+
             const result = await pool.query(query, [appointmentId, userId]);
             return result.rows.length > 0;
         } catch (error) {

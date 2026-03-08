@@ -39,7 +39,7 @@ class Availability {
                 SELECT appointment_date, appointment_time 
                 FROM appointments 
                 WHERE doctor_id = $1 
-                AND status = 'scheduled'
+                AND status IN ('scheduled', 'completed')
                 AND appointment_date >= DATE($2) 
                 AND appointment_date <= DATE($3)
             `;

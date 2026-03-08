@@ -30,7 +30,7 @@ class NotificationService {
                 WHERE a.status = 'scheduled'
                 AND a.reminded_30m = false
                 AND a.appointment_date = CURRENT_DATE
-                AND a.appointment_time BETWEEN (CURRENT_TIME + interval '25 minutes') AND (CURRENT_TIME + interval '35 minutes')
+                AND a.appointment_time BETWEEN (CURRENT_TIME + interval '29 minutes') AND (CURRENT_TIME + interval '31 minutes')
             `;
             const result30m = await pool.query(query30m);
             for (const app of result30m.rows) {
@@ -69,7 +69,7 @@ class NotificationService {
                 WHERE a.status = 'scheduled'
                 AND a.reminded_5m = false
                 AND a.appointment_date = CURRENT_DATE
-                AND a.appointment_time BETWEEN (CURRENT_TIME - interval '2 minutes') AND (CURRENT_TIME + interval '10 minutes')
+                AND a.appointment_time BETWEEN (CURRENT_TIME + interval '4 minutes') AND (CURRENT_TIME + interval '6 minutes')
             `;
             const result5m = await pool.query(query5m);
             for (const app of result5m.rows) {
