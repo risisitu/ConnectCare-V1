@@ -40,6 +40,16 @@ const navItems: NavItem[] = [
     icon: <TableIcon />,
     subItems: [{ name: "Patient Details Table", path: "basic-tables", pro: false }],
   },
+  {
+    icon: <TableIcon />,
+    name: "View Consultations",
+    path: "admin/consultations",
+  },
+  {
+    icon: <GridIcon />, // Reusing an existing icon
+    name: "Audit Logs",
+    path: "admin/audit-logs",
+  },
 ];
 
 const AppSidebar: React.FC = () => {
@@ -255,15 +265,15 @@ const AppSidebar: React.FC = () => {
   const displayedMainNav = navItems
     .filter((item) => {
       if (role === "admin") {
-        // Admin: hide Calendar, Profile, and Patient Details
-        return item.name === "Dashboard";
+        // Admin: hide Calendar, Profile, and Patient Details, show Dashboard, Consultations, and Audit Logs
+        return item.name === "Dashboard" || item.name === "View Consultations" || item.name === "Audit Logs";
       }
       if (role === "patient") {
-        // Patient: hide Calendar
-        return item.name !== "Calendar";
+        // Patient: hide Calendar and admin-only items
+        return item.name !== "Calendar" && item.name !== "View Consultations" && item.name !== "Audit Logs";
       }
-      // Doctor (or other): show all
-      return true;
+      // Doctor (or other): show all except admin-only items
+      return item.name !== "View Consultations" && item.name !== "Audit Logs";
     })
     .map((item) => {
       // Patient specific: rename Patient Details to Appointments

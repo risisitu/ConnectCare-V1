@@ -165,6 +165,47 @@ class Appointment {
             throw error;
         }
     }
+
+    static async getAllAppointmentsAdmin() {
+        try {
+            const query = `
+                SELECT a.*, 
+                       d.first_name as doctor_first_name,
+                       d.last_name as doctor_last_name,
+                       d.specialization as doctor_specialization,
+                       p.first_name as patient_first_name,
+                       p.last_name as patient_last_name
+                FROM appointments a
+                INNER JOIN doctors d ON a.doctor_id = d.id
+                INNER JOIN patients p ON a.patient_id = p.id
+                ORDER BY a.appointment_date DESC, a.appointment_time DESC
+            `;
+
+            const result = await pool.query(query);
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async updateAppointmentStatusAdmin(appointmentId, status) {
+        try {
+            const query = `
+                UPDATE appointments 
+                SET status = $1
+                WHERE id = $2
+                RETURNING *
+            `;
+
+            const result = await pool.query(query, [status, appointmentId]);
+            if (result.rows.length === 0) {
+                throw new Error('Appointment not found');
+            }
+            return result.rows[0];
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 module.exports = Appointment;

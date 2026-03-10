@@ -18,5 +18,13 @@ router.post('/login', AdminController.login);
 router.use(authMiddleware, adminMiddleware);
 router.get('/users', AdminController.getAllUsers);
 router.put('/users/:type/:id/status', AdminController.updateUserStatus);
+router.get('/consultations', AdminController.getAllConsultations);
+router.put('/consultations/:id/cancel', AdminController.cancelConsultation);
+
+// Audit Logs Management Routes
+router.get('/audit-logs', AdminController.getAuditLogs);
+
+// Dashboard Stats
+router.get('/dashboard-stats', AdminController.getDashboardStats);
 
 module.exports = router;

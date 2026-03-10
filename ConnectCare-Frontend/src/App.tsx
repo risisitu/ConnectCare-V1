@@ -14,6 +14,8 @@ import BarChart from "./pages/Charts/BarChart";
 import Calendar from "./pages/Calendar";
 import BasicTables from "./pages/Tables/BasicTables";
 import AppointmentsPage from "./pages/Tables/Appointments";
+import AdminConsultations from "./pages/Tables/AdminConsultations";
+import AdminAuditLogs from "./pages/Tables/AdminAuditLogs";
 import FormElements from "./pages/Forms/FormElements";
 import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
@@ -47,6 +49,8 @@ export default function App() {
             {/* Tables */}
             <Route path="basic-tables" element={<BasicTables />} />
             <Route path="appointments" element={<AppointmentsPage />} />
+            <Route path="admin/consultations" element={<AdminConsultations />} />
+            <Route path="admin/audit-logs" element={<AdminAuditLogs />} />
 
             {/* Ui Elements */}
             <Route path="alerts" element={<Alerts />} />

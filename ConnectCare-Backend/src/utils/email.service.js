@@ -289,7 +289,70 @@ module.exports = {
             console.log(`Appointment reminder (${reminderType}) sent to:`, to);
             return true;
         } catch (error) {
-            console.error(`Error sending appointment reminder (${reminderType}):`, error);
+            return false;
+        }
+    },
+    sendAdminCancellationEmail: async (to, userName, role, appointmentDate, appointmentTime, reason) => {
+        // SMTP settings
+        const host = process.env.SMTP_HOST || 'smtp.gmail.com';
+        const port = parseInt(process.env.SMTP_PORT || '587', 10);
+        const user = process.env.SMTP_USER || 'connectcarea@gmail.com';
+        const pass = process.env.SMTP_PASS || process.env.SMTP_PASSWORD;
+        const from = process.env.SMTP_FROM || user;
+
+        const transporter = nodemailer.createTransport({
+            host, port, secure: port === 465, auth: { user, pass }
+        });
+
+        const subject = `Consultation Cancelled by Administrator`;
+
+        const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f9fafb; padding: 20px; }
+            .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+            .header { background: #dc2626; color: white; padding: 30px; text-align: center; }
+            .content { padding: 40px; }
+            .footer { background: #f3f4f6; padding: 20px; text-align: center; font-size: 13px; color: #6b7280; }
+            .reminder-box { background: #fee2e2; padding: 25px; border-radius: 10px; border: 1px solid #fecaca; margin: 20px 0; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1 style="margin:0; font-size: 26px;">Consultation Cancelled</h1>
+            </div>
+            <div class="content">
+                <p style="font-size: 18px; color: #1e293b; margin-bottom: 25px;">Hello <strong>${userName}</strong>,</p>
+                <p style="color: #475569; line-height: 1.6;">Your upcoming consultation has been cancelled by the ConnectCare Administrator.</p>
+                
+                <div class="reminder-box">
+                    <p style="margin: 0; font-size: 15px; color: #991b1b;"><strong>Cancelled Appointment Details:</strong></p>
+                    <p style="margin: 10px 0 0 0; font-size: 18px; font-weight: 600; color: #7f1d1d;">${appointmentDate} at ${appointmentTime}</p>
+                    <p style="margin: 10px 0 0 0; font-size: 14px; color: #991b1b;">Reason: ${reason}</p>
+                </div>
+                
+                <div style="margin-top: 35px; text-align: center;">
+                    <p style="color: #64748b; font-size: 14px; margin-bottom: 15px;">If you have any questions, please contact support.</p>
+                </div>
+            </div>
+            <div class="footer">
+                <p>© 2026 ConnectCare. All rights reserved.</p>
+                <p>This is an automated notification. Please do not reply.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+        `;
+
+        try {
+            const info = await transporter.sendMail({ from, to, subject, html });
+            console.log(`Admin cancellation email sent to ${role}:`, to);
+            return true;
+        } catch (error) {
+            console.error(`Error sending admin cancellation email to ${role}:`, error);
             return false;
         }
     }
