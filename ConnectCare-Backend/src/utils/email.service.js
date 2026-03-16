@@ -331,7 +331,7 @@ module.exports = {
                 <div class="reminder-box">
                     <p style="margin: 0; font-size: 15px; color: #991b1b;"><strong>Cancelled Appointment Details:</strong></p>
                     <p style="margin: 10px 0 0 0; font-size: 18px; font-weight: 600; color: #7f1d1d;">${appointmentDate} at ${appointmentTime}</p>
-                    <p style="margin: 10px 0 0 0; font-size: 14px; color: #991b1b;">Reason: ${reason}</p>
+                    <p style="margin: 10px 0 0 0; font-size: 14px; color: #991b1b;">Cancellation Reason: ${reason}</p>
                 </div>
                 
                 <div style="margin-top: 35px; text-align: center;">

@@ -122,6 +122,7 @@ class AdminController {
         try {
             const adminId = req.user?.id || 'admin-1';
             const { id } = req.params;
+            const { cancellationReason } = req.body;
 
             // Validate that we have the appointment
             const appointment = await Appointment.getAppointmentById(id);
@@ -138,7 +139,7 @@ class AdminController {
                 await NotificationService.createInAppNotification(
                     appointment.patient_id,
                     'Consultation Cancelled',
-                    `Your consultation with Dr.${appointment.doctor_last_name} has been cancelled by the Administrator.`,
+                    `Your consultation with Dr.${appointment.doctor_last_name} has been cancelled by the Administrator. Reason: ${cancellationReason || 'No reason provided.'}`,
                     'cancellation'
                 );
 
@@ -146,7 +147,7 @@ class AdminController {
                 await NotificationService.createInAppNotification(
                     appointment.doctor_id,
                     'Consultation Cancelled',
-                    `Your consultation with ${appointment.patient_first_name} ${appointment.patient_last_name} has been cancelled by the Administrator.`,
+                    `Your consultation with ${appointment.patient_first_name} ${appointment.patient_last_name} has been cancelled by the Administrator. Reason: ${cancellationReason || 'No reason provided.'}`,
                     'cancellation'
                 );
 
@@ -158,7 +159,7 @@ class AdminController {
                         'Patient',
                         appointment.appointment_date,
                         appointment.appointment_time,
-                        appointment.reason
+                        cancellationReason || 'No reason provided.'
                     );
                 }
 
@@ -169,7 +170,7 @@ class AdminController {
                         'Doctor',
                         appointment.appointment_date,
                         appointment.appointment_time,
-                        appointment.reason
+                        cancellationReason || 'No reason provided.'
                     );
                 }
             } catch (notifyError) {
@@ -186,7 +187,7 @@ class AdminController {
                     actionType: 'cancellation',
                     targetName: `Dr. ${appointment.doctor_last_name} and ${appointment.patient_first_name}`,
                     targetRole: 'consultation',
-                    details: `Administrator cancelled consultation scheduled for ${formattedDate} at ${formattedTime} between Dr. ${appointment.doctor_last_name} and ${appointment.patient_first_name}.`
+                    details: `Administrator cancelled consultation scheduled for ${formattedDate} at ${formattedTime} between Dr. ${appointment.doctor_last_name} and ${appointment.patient_first_name}. Reason: ${cancellationReason || 'No reason provided.'}`
                 });
             } catch (auditError) {
                 console.error('Failed to create audit log for consultation cancellation:', auditError);

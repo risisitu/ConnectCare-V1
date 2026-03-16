@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 // Manual average time in seconds: 8 minutes 28 seconds
-const MANUAL_AVERAGE_SECONDS = 8 * 60 + 28; // 508 seconds
+// const MANUAL_AVERAGE_SECONDS = 8 * 60 + 28; // 508 seconds
 
 function formatSeconds(seconds: number): string {
     if (seconds < 60) return `${Math.round(seconds)}s`;
@@ -40,10 +40,6 @@ export default function TimeSaved() {
     }, []);
 
     const lastGenSec = stats?.last_generation_seconds ?? null;
-    const timeSavedSeconds = lastGenSec !== null ? MANUAL_AVERAGE_SECONDS - lastGenSec : null;
-    const efficiencyGain = lastGenSec !== null
-        ? Math.max(0, Math.round(((MANUAL_AVERAGE_SECONDS - lastGenSec) / MANUAL_AVERAGE_SECONDS) * 100))
-        : null;
 
     const hasData = !loading && lastGenSec !== null;
     const noData = !loading && lastGenSec === null;
@@ -58,10 +54,10 @@ export default function TimeSaved() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                     </div>
-                    <h4 className="text-xl font-bold text-gray-800 dark:text-white">Time Saved with AI</h4>
+                    <h4 className="text-xl font-bold text-gray-800 dark:text-white">AI Generation Time</h4>
                 </div>
                 <p className="text-sm text-gray-500 dark:text-gray-400 ml-10">
-                    Manual avg: <span className="font-medium text-gray-700 dark:text-gray-300">8m 28s</span> vs AI generation
+                    Time taken by AI to generate reports
                 </p>
             </div>
 
@@ -84,13 +80,9 @@ export default function TimeSaved() {
                         <div className="flex items-end justify-between">
                             <div>
                                 <p className="text-3xl font-bold text-brand-700 dark:text-brand-300">
-                                    ~{formatSeconds(Math.max(0, timeSavedSeconds!))}
+                                    {formatSeconds(lastGenSec!)}
                                 </p>
-                                <p className="text-sm text-brand-600 dark:text-brand-400 mt-0.5">saved per consultation</p>
-                            </div>
-                            <div className="text-right">
-                                <p className="text-xs text-brand-500 dark:text-brand-400">AI took</p>
-                                <p className="text-lg font-bold text-brand-700 dark:text-brand-300">{formatSeconds(lastGenSec!)}</p>
+                                <p className="text-sm text-brand-600 dark:text-brand-400 mt-0.5">AI processing time</p>
                             </div>
                         </div>
                         {stats?.last_report_date && (
@@ -98,23 +90,6 @@ export default function TimeSaved() {
                                 From: {new Date(stats.last_report_date).toLocaleDateString(undefined, { dateStyle: 'medium' })}
                             </p>
                         )}
-                    </div>
-
-                    {/* Efficiency Gain Bar */}
-                    <div>
-                        <div className="flex justify-between mb-1.5">
-                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Efficiency Gain</span>
-                            <span className="text-sm font-bold text-brand-600 dark:text-brand-400">{efficiencyGain}%</span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 overflow-hidden">
-                            <div
-                                className="bg-gradient-to-r from-brand-500 to-brand-600 h-2.5 rounded-full transition-all duration-700 ease-out"
-                                style={{ width: `${efficiencyGain}%` }}
-                            />
-                        </div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
-                            {efficiencyGain}% faster than manual documentation
-                        </p>
                     </div>
 
                     {/* Total count footer */}

@@ -25,6 +25,7 @@ export default function AdminConsultations() {
     const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
     const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
     const [isCancelling, setIsCancelling] = useState(false);
+    const [cancelReason, setCancelReason] = useState("");
 
     useEffect(() => {
         fetchAppointments();
@@ -63,6 +64,7 @@ export default function AdminConsultations() {
 
     const handleCancelClick = (app: Appointment) => {
         setSelectedAppointment(app);
+        setCancelReason("");
         setIsCancelModalOpen(true);
     };
 
@@ -79,6 +81,7 @@ export default function AdminConsultations() {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
                 },
+                body: JSON.stringify({ cancellationReason: cancelReason }),
             });
 
             const data = await response.json();
@@ -274,6 +277,20 @@ export default function AdminConsultations() {
                         <p className="mb-6 text-sm text-gray-500 dark:text-gray-400">
                             Are you sure you want to cancel the appointment between Dr. {selectedAppointment.doctor_last_name} and {selectedAppointment.patient_first_name}? This action cannot be undone and both parties will be notified.
                         </p>
+
+                        <div className="mb-6 text-left">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Reason for Cancellation (Optional)
+                            </label>
+                            <textarea
+                                value={cancelReason}
+                                onChange={(e) => setCancelReason(e.target.value)}
+                                className="w-full rounded-lg border border-gray-300 bg-white p-3 text-sm text-gray-900 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:focus:border-red-500"
+                                rows={3}
+                                placeholder="Enter reason for cancellation..."
+                            ></textarea>
+                        </div>
+
                         <div className="flex gap-3">
                             <button
                                 disabled={isCancelling}
